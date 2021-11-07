@@ -33,7 +33,7 @@ public class InMemoryDictionary extends TreeMap<String,String> implements Persis
 		// initialize buffer
 		BufferedReader buffer = new BufferedReader(new FileReader(this.file));
 
-
+		// loop through file
 		for(String nextLine = buffer.readLine(); nextLine != null; nextLine = buffer.readLine()) {
 			String word = null;
 			String def = null;

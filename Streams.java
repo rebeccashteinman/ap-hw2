@@ -92,19 +92,17 @@ public class Streams {
 	 * @return the number read from the stream
 	 */
 	public static long readNumber(InputStream in) throws IOException {
-		long dig;
-		int counter = 0;
-		long result = 0;
+		long dig, result = 0;
 
-		// read number
-		while((dig = in.read()) != -1) {
-			counter++;
-			// convert to unsigned number
-			result = (result << 8) + (dig & 0xff);
-		}
-		// if stream ends before 5 bytes are read
-		if(counter < 5) {
-			return -1;
+		// check that more than 5 bytes are read
+		for(int i = 0; i < 5; i++) {
+			dig = in.read();
+			if(dig < 0) {
+				return -1;
+			}
+			// read as unsigned int
+			result = result << 8;
+			result = result + dig;
 		}
 		return result;
 

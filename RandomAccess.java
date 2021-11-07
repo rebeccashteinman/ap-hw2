@@ -48,22 +48,25 @@ public class RandomAccess {
 	public static void sortTriBytes(RandomAccessFile file) throws IOException {
 		// indicates whether sorting is done
 		boolean sorted = false;
+
+		file.seek(0);
 		//iterate through 'array'
 		while(!sorted) {
 			sorted = true;
 			int prevNum = 0;
-			for (int i = 0; i < file.length() - 2; i = i + 3) {
-				int num1 = file.read();
-				int num2 = file.read();
-				int num3 = file.read();
-				int num = (num1 << 16) | (num2 << 8) | num3;
+			for (int i = 0; i < file.length() - 2; i += 3) {
+				// convert value of number
+				int num = (file.read() << 16) | (file.read() << 8) | file.read();
+				// make comparison
 				if (num < prevNum) {
-					file.seek(i - 3);
 					sorted = false;
-					byte[] replace1 = {(byte) num1, (byte) num2, (byte) num3};
-					byte[] replace2 = {(byte) (prevNum >> 16), (byte) (prevNum >> 8), (byte) (prevNum)};
-					file.write(replace1);
-					file.write(replace2);
+
+					// swap nums
+					file.seek(i - 3);
+					byte[] write1 = {(byte) (num >>> 16), (byte) (num >>> 8), (byte) num};
+					byte[] write2 = {(byte) (prevNum >> 16), (byte) (prevNum >> 8), (byte) (prevNum)};
+					file.write(write1);
+					file.write(write2);
 				} else {
 					prevNum = num;
 				}
