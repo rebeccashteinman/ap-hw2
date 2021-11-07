@@ -53,14 +53,15 @@ public class RandomAccess {
 		//iterate through 'array'
 		while(!sorted) {
 			sorted = true;
-			int prevNum = 0;
+			// initialize with minimal value
+			int prevNum = Integer.MIN_VALUE;
+
 			for (int i = 0; i < file.length() - 2; i += 3) {
 				// convert value of number
 				int num = (file.read() << 16) | (file.read() << 8) | file.read();
-				// make comparison
-				if (num < prevNum) {
+				// make comparison, i < 3 only when checking first number
+				if (num < prevNum && i >= 3) {
 					sorted = false;
-
 					// swap nums
 					file.seek(i - 3);
 					byte[] write1 = {(byte) (num >>> 16), (byte) (num >>> 8), (byte) num};
