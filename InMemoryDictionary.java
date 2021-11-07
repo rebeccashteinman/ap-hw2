@@ -35,15 +35,18 @@ public class InMemoryDictionary extends TreeMap<String,String> implements Persis
 
 		// loop through file
 		for(String nextLine = buffer.readLine(); nextLine != null; nextLine = buffer.readLine()) {
+			int length = nextLine.length();
+
+			int index = nextLine.indexOf(':');
+
 			String word = null;
 			String def = null;
-			int length = nextLine.length();
-			int index = nextLine.indexOf(':');
 
 			// if we have no colon, we have empty definition
 			if(index == -1) {
 				word = nextLine;
 				def = null;
+				
 			} else {
 				// separate by the colon
 				word = nextLine.substring(0, index);
